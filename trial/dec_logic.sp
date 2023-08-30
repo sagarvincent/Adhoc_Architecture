@@ -1,5 +1,5 @@
 #const n = 8.
-steps(1..n).
+t = 0..n.
 % -------------------- inputs -------------------- %
 xpos = 1..5.
 ypos = 1..5.
@@ -19,23 +19,38 @@ dribble(agent).
 dash(agent).
 move(agent,xpos,ypos).
 
-has_ball(agent).
+same_loc_after_act(t, agent).
+
+ts(t).
+
+has_ball(t,agent).
+ball_position(t,xpos,ypos).
+
 
 % -------------------- causal laws -------------------- %
 
-% agent cant be in two positions
+% An agent cannot be in two positions at the same time.
+:- move(agent, X1, Y1), move(agent, X2, Y2), ts(t1), ts(t2), t1 = t2, (X1, Y1) != (X2, Y2).
 
-% two agents cant be in the same positions
+% Two agents cannot be in the same position at the same time.
+:- move(agent1, X, Y), move(agent2, X, Y), ts(t), agent1 != agent2, t = n.
 
-% passing will change the possesion of ball
+% Passing will change the possession of the ball.
+has_ball(t, Teammate) :- pass(agent, Teammate), has_ball(t-1, agent).
+:- pass(agent, Teammate), has_ball(t-1, Teammate), not has_ball(t, Teammate).
 
-% two agents cant have the ball at the same time
+% Two agents cannot have the ball at the same time.
+:- has_ball(t, agent1), has_ball(t, agent2), agent1 != agent2.
 
-% location of agent and the ball is the same 
+% The location of an agent and the ball is the same after a move.
+same_location_after_move(t, agent) :- move(agent, X, Y), ball_position(t-1, X, Y).
+:- move(agent, _, _), ball_position(t, X, Y), not same_loc_after_act(t, agent).
 
-%  
+%   
 
 
+
+% -------------------- Results/outputs -------------------- %
 
 
 
