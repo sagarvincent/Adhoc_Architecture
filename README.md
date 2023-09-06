@@ -13,6 +13,7 @@ sudo apt install flex
 sudo apt install python-is-python3
 
 sudo apt install cmake
+sudo apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 sudo apt install qmake
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=RelwithDebInfo ..
